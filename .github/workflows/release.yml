@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # NOTE: do NOT set `registry-url` here. It makes setup-node write an
       # .npmrc expecting NODE_AUTH_TOKEN and conflicts with semantic-release's
@@ -26,7 +26,7 @@ jobs:
       # in place — that corrupts npm's dep tree and breaks provenance signing
       # with "Cannot find module 'sigstore'".
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 24
 
