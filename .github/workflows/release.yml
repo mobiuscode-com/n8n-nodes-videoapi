@@ -28,18 +28,9 @@ jobs:
         run: npm ci
 
       - name: Semantic release (version bump + tag + GitHub Release)
-        uses: cycjimmy/semantic-release-action@v6
-        with:
-          semantic_version: 24
-          extra_plugins: |
-            @semantic-release/commit-analyzer
-            @semantic-release/release-notes-generator
-            @semantic-release/github
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: dummy-value
+        run: npx semantic-release
 
       - name: Publish to npm
-        run: |
-          git pull origin main
-          npm publish --provenance --access public
+        run: npm publish --provenance --access public

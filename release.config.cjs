@@ -5,7 +5,11 @@ module.exports = {
     '@semantic-release/release-notes-generator',
     [
       '@semantic-release/npm',
-      { npmPublish: false },
+      {
+        npmPublish: false,
+        tarballDir: false,
+        verifyConditions: [],
+      },
     ],
     '@semantic-release/github',
   ],
