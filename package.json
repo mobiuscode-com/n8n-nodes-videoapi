@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-videoapi",
+  "name": "@mobiuscode/n8n-nodes-videoapi",
   "version": "1.0.0",
   "description": "n8n community nodes that easily integrate VideoAPI Workflows in your n8n projects",
   "keywords": ["n8n-community-node-package", "n8n-nodes", "integration", "api", "automation"],
@@ -9,8 +9,8 @@
     "build": "tsc -p tsconfig.build.json && gulp build:icons",
     "dev": "tsc --watch",
     "format": "prettier \"nodes/**/*.{ts,js,json,md}\" \"credentials/**/*.{ts,js,json,md}\" --write",
-    "lint": "eslint \"nodes/**/*.{ts,js}\" \"credentials/**/*.{ts,js}\" package.json --max-warnings=0",
-    "lintfix": "eslint \"nodes/**/*.{ts,js}\" \"credentials/**/*.{ts,js}\" package.json --fix",
+    "lint": "eslint \"nodes/**/*.ts\" \"credentials/**/*.ts\" --max-warnings=0",
+    "lintfix": "eslint \"nodes/**/*.ts\" \"credentials/**/*.ts\" --fix",
     "prepublishOnly": "npm run build && npm run lint"
   },
   "files": [

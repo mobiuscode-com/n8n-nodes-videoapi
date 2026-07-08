@@ -1,6 +1,6 @@
 # n8n-nodes-videoapi
 
-**IMPORTANT: This is still work in progress and not yet ready for production**
+**IMPORTANT: This is still work in progress and not yet ready for production. Use at your own risk.**
 
 This is an n8n community node package for [Video API](https://video-api.io) — an API for AI-powered video processing.
 
@@ -14,7 +14,7 @@ This is an n8n community node package for [Video API](https://video-api.io) — 
 Follow the [n8n community node installation guide](https://docs.n8n.io/integrations/community-nodes/installation/).
 
 ```
-n8n-nodes-videoapi
+@mobiuscode/n8n-nodes-videoapi
 ```
 
 ## Credentials
