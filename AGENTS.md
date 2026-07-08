@@ -27,7 +27,7 @@ n8n community node package for [Video API](https://video-api.io).
 - Triggers: push to `main` or manual `workflow_dispatch`
 - Commit conventions: `feat:` → MINOR, `fix:` → PATCH, `BREAKING CHANGE:` / `!:` → MAJOR
 - `prepublishOnly` runs `build && lint` automatically before each publish
-- Uses npm Trusted Publishing (OIDC) — no npm token secrets needed; just enable it on npmjs.com
+- Requires `NPM_TOKEN` secret set in GitHub repo settings (npm Automation token)
 
 ## Testing locally
 
