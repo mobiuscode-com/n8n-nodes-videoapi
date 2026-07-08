@@ -6,8 +6,8 @@ This is an n8n community node package for [Video API](https://video-api.io) — 
 
 ## Features
 
-- **AI Cut** — Cut and merge videos using AI based on a text prompt
-- **Upload File** — Upload a video or audio file to Video API
+- **AI Cut** - Cut and merge videos using AI based on a text prompt
+- **Upload File** - Upload a video or audio file to Video API
 
 ## Installation
 
