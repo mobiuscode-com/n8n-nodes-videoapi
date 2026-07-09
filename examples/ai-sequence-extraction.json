@@ -1,0 +1,51 @@
+{
+  "name": "Video API — AI Sequence Extraction",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## AI Sequence Extraction\n\nExtracts video sequences from a video by prompt (e.g. split on scene/transition points).\n\nHere: pulls a video from a URL and extracts sequences, returning the result as binary (`data`).\n\nSelect your **Video API** credential on the node, then run.",
+        "height": 300,
+        "width": 360
+      },
+      "id": "c2000000-0003-4003-8003-000000000003",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [180, 100]
+    },
+    {
+      "parameters": {},
+      "id": "c2000000-0001-4001-8001-000000000001",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [260, 460]
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "aiSplit",
+        "inputMode": "url",
+        "videoUrl": "https://static.mobiuscode.com/demo/Charge_-_Blender_Open_Movie-full_movie.webm.1080p.vp9.webm",
+        "prompt": "Cut the video into separate sequences based on the transition points.",
+        "jobOptions": {
+          "waitForCompletion": true,
+          "downloadResult": true
+        }
+      },
+      "id": "c2000000-0002-4002-8002-000000000002",
+      "name": "AI Sequence Extraction",
+      "type": "n8n-nodes-videoapi.videoApi",
+      "typeVersion": 1,
+      "position": [500, 460]
+    }
+  ],
+  "connections": {
+    "When clicking 'Execute workflow'": {
+      "main": [[{ "node": "AI Sequence Extraction", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {}
+}
