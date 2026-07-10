@@ -1,24 +1,29 @@
 {
   "name": "@mobiuscode/n8n-nodes-videoapi",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "n8n community nodes that easily integrate VideoAPI Workflows in your n8n projects",
   "keywords": ["n8n-community-node-package", "n8n-nodes", "integration", "api", "automation"],
   "license": "MIT",
+  "homepage": "https://github.com/mobiuscode-com/n8n-nodes-videoapi#readme",
   "author": "MobiusCode GmbH (https://mobiuscode.com)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mobiuscode-com/n8n-nodes-videoapi.git"
   },
-  "main": "index.js",
+  "bugs": {
+    "url": "https://github.com/mobiuscode-com/n8n-nodes-videoapi/issues"
+  },
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json && gulp build:icons",
     "dev": "tsc --watch",
     "format": "prettier \"nodes/**/*.{ts,js,json,md}\" \"credentials/**/*.{ts,js,json,md}\" --write",
-    "prepublishOnly": "npm run build"
+    "lint": "eslint \"nodes/**/*.ts\" \"credentials/**/*.ts\" --max-warnings=0",
+    "lintfix": "eslint \"nodes/**/*.ts\" \"credentials/**/*.ts\" --fix",
+    "prepublishOnly": "npm run build && npm run lint"
   },
   "files": [
     "dist/",
-    "index.js",
     "README.md",
     "examples/",
     "LICENSE.md"
@@ -28,14 +33,13 @@
     "credentials": ["dist/credentials/VideoApiCredentials.credentials.js"],
     "nodes": ["dist/nodes/video_api/VideoApi.node.js"]
   },
-  "publishConfig": {
-    "provenance": true
-  },
   "devDependencies": {
+    "@typescript-eslint/parser": "^8.x",
+    "@typescript-eslint/eslint-plugin": "^8.x",
+    "eslint": "^9.x",
     "gulp": "^4.x",
     "n8n-workflow": "^1.x",
     "prettier": "^3.x",
-    "semantic-release": "^24.x",
     "typescript": "^5.x"
   },
   "peerDependencies": {
