@@ -17,7 +17,7 @@ npm install @mobiuscode/n8n-nodes-videoapi
 
 ## Credentials
 
-Get an API key from [video-api.io](https://video-api.io), then create a **Video API** credential in n8n:
+Get an API key from [video-api.io](https://video-api.io), then create **Video API** credentials in n8n:
 
 - **API Key** — sent as the `x-api-key` header.
 - **Base URL** — defaults to `https://api.video-api.io`; change it only for a self-hosted/local instance.
