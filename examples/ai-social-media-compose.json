@@ -1,0 +1,59 @@
+{
+  "name": "Video API — AI Social Media Compose",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## AI Social Media Compose\n\nComposes a social-media video: AI-cuts the footage, adds an AI voice-over from your script, optional music and subtitles.\n\nHere: pulls a video from a URL and composes a portrait (Reel) clip, returning the result as binary (`data`).\n\nSelect your **Video API** credential on the node, then run.",
+        "height": 320,
+        "width": 360
+      },
+      "id": "c3000000-0003-4003-8003-000000000003",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [180, 100]
+    },
+    {
+      "parameters": {},
+      "id": "c3000000-0001-4001-8001-000000000001",
+      "name": "When clicking 'Execute workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [260, 480]
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "aiSocialMediaCompose",
+        "inputMode": "url",
+        "videoUrl": "https://static.mobiuscode.com/demo/Charge_-_Blender_Open_Movie-full_movie.webm.1080p.vp9.webm",
+        "script": "Check out this epic short — packed with action and ready for your feed.",
+        "voice": "JILLIAN",
+        "music": true,
+        "enableSubtitles": true,
+        "additionalPrompt": "Keep it energetic and under 30 seconds.",
+        "resolution": "reelPortrait",
+        "outputFps": 30,
+        "outputFormat": "H265",
+        "enableSmartCrop": true,
+        "jobOptions": {
+          "waitForCompletion": true,
+          "downloadResult": true
+        }
+      },
+      "id": "c3000000-0002-4002-8002-000000000002",
+      "name": "AI Social Media Compose",
+      "type": "n8n-nodes-videoapi.videoApi",
+      "typeVersion": 1,
+      "position": [500, 480]
+    }
+  ],
+  "connections": {
+    "When clicking 'Execute workflow'": {
+      "main": [[{ "node": "AI Social Media Compose", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "pinData": {}
+}

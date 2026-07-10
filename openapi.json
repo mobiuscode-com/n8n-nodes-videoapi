@@ -1,0 +1,3075 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Video API",
+    "description": "# Welcome to the Video API\n\nThis API provides powerful video and audio processing capabilities including:\n\n- **Video Processing**: Cutting, transcoding, scaling, overlaying videos, and generating preview images\n- **Audio Processing**: Transcoding, extracting, replacing, and mixing audio tracks; retrieve audio metadata\n- **AI-Powered Features**: Text-to-speech generation with 30 natural voices; AI-based video sequence extraction, cutting, and full social media video composing\n- **Rendering**: Subtitle rendering and custom overlay animations\n- **File Management**: Uploading, downloading, and pulling files from external URLs with automatic cleanup\n\n## Authentication\n\nAll API requests require authentication using an API key. Include your API key in the request header:\n\n```\nx-api-key: your-api-key-here\n```\n\nTo obtain an API key:\n1. Create a user account on https://video-api.io\n2. Generate an API key for your user\n3. Include the key in all your requests\n\n## Credits System\n\nMost operations consume credits from your account. Each endpoint's credit cost is documented\nin its description. Monitor your credit balance in your user account on https://video-api.io\n\n## Job-Based Processing\n\nMany operations are asynchronous and return a Job ID. Poll the Job endpoint to check status\nand retrieve results when processing is complete.",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:39423",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "ApiKey": []
+    }
+  ],
+  "paths": {
+    "/v1/video/transcode": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Transcode Video",
+        "description": "Transcode the video to a different format and resolution",
+        "operationId": "transcodeVideo",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranscodeVideoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/subtitles": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Add Subtitles to Video",
+        "description": "Generates subtitles for that given video and renders them in the lower center of the video. To auto-correct spelling mistakes provide the optional script. If you need more control over where to place the subtitles, use the /render/subtitles endpoint and compose it via the /video/overlay endpoint.",
+        "operationId": "addSubtitlesToVideo",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddSubtitlesToVideoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-cost-unit-based": {
+          "unit": "5 minutes of video input",
+          "creditsPerUnit": "1"
+        }
+      }
+    },
+    "/v1/video/replace-audio": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Replace Audio",
+        "description": "Replaces the audio of the given video with the given audio",
+        "operationId": "replaceAudio",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplaceAudioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/overlay": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Overlay Videos",
+        "description": "Overlays two or more videos/images over a background/base video",
+        "operationId": "overlayVideos",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OverlayVideoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/mix-in-audio": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Mix In Audio",
+        "description": "Mixes the audio into the given video file",
+        "operationId": "mixInAudio",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MixInAudioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/generate-preview": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Generate Preview Image",
+        "description": "Generates a preview image from the given video file",
+        "operationId": "generatePreview",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GeneratePreviewRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/extract-audio": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Extract Audio",
+        "description": "Extracts the audio from the given video file.",
+        "operationId": "extractAudio",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExtractAudioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/cut": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Cut Video",
+        "description": "Generates a new video by cutting and merging the video parts as requested",
+        "operationId": "cutVideo",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CutVideoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/caption": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Caption Video",
+        "description": "Renders the given text as subtitles and burns them into the given video. The length of the resulting video is determined by the `lengthPrecedence` parameter: set to `VIDEO` to end at the video's natural end, or `SUBTITLE` to end when the last subtitle finishes.",
+        "operationId": "captionVideo",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaptionVideoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/ai/split": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "AI video sequence extraction",
+        "description": "Extracts video sequences by a given prompt from the given video",
+        "operationId": "aiSplitVideo",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiSplitVideoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-cost-unit-based": {
+          "unit": "60 seconds of video input",
+          "creditsPerUnit": "1"
+        }
+      }
+    },
+    "/v1/video/ai/social-media-compose": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "AI social media video composing",
+        "description": "Creates a new video for social media by cutting sequences from the provided videos, adding voice-over, music and subtitles. The created video can directly be posted to social media.",
+        "operationId": "aiComposeSocialMediaVideo",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiComposeSocialMediaVideoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/video/ai/cut": {
+      "post": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "AI video cutting",
+        "description": "Creates a new video by cutting sequences from the provided videos",
+        "operationId": "aiCutVideo",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AiCutVideoRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-cost-unit-based": {
+          "unit": "60 seconds of video input (all input files are counted regardless of what the ai uses for the final video)",
+          "creditsPerUnit": "1"
+        }
+      }
+    },
+    "/v1/render/subtitles": {
+      "post": {
+        "tags": [
+          "Render"
+        ],
+        "summary": "Render Subtitles",
+        "description": "Renders subtitles for a given video file. Note that this is optimized currently for rendering of subtitles for portrait mode videos only!",
+        "operationId": "renderSubtitles",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubtitleRenderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/render/overlay": {
+      "post": {
+        "tags": [
+          "Render"
+        ],
+        "summary": "Render Overlay",
+        "description": "Renders an overlay of one or multiple png layers that are animated based on the specified list of actions",
+        "operationId": "renderOverlay",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OverlayRenderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/job/{jobId}/queue": {
+      "post": {
+        "tags": [
+          "Job"
+        ],
+        "summary": "Queue Draft Job",
+        "description": "Transitions a DRAFT job to SCHEDULED, performing a credit check and claiming a job slot.",
+        "operationId": "queueDraftJob",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "402": {
+            "description": "Job slot limit reached or job allowance for the payment period exhausted",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/file": {
+      "post": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Upload File",
+        "description": "Uploads and temporarily stores a file for processing. Files are automatically deleted after a certain period of inactivity (or earlier when an expiresAt time is specified).",
+        "operationId": "store",
+        "parameters": [
+          {
+            "name": "expiresAt",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoredFileMetaDataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/file/pull": {
+      "post": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Pull File",
+        "description": "Downloads a file from an external URL and stores it for processing.",
+        "operationId": "pullFile",
+        "parameters": [
+          {
+            "name": "expiresAt",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PullFileRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/audio/transcode": {
+      "post": {
+        "tags": [
+          "Audio"
+        ],
+        "summary": "Convert Audio to a Different Format",
+        "description": "Converts audio data to a standard audio format (FLAC, AAC, AAC HQ or MP3)",
+        "operationId": "transcode",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranscodeAudioRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/audio/generate/script": {
+      "post": {
+        "tags": [
+          "Audio"
+        ],
+        "summary": "Generate Voiceover from Script",
+        "description": "Generates an audio clip of an AI voice reading your script (text-to-speech). You can also give instructions like 'read this slowly: ...', etc.\n\n**Available voices:**\n\n| Voice | Character |\n|---|---|\n| JILLIAN | Firm & confident |\n| MARCUS | Firm & confident |\n| ETHAN | Firm & confident |\n| ANDREA | Youthful & energetic |\n| OLIVER | Youthful & energetic |\n| RYAN | Youthful & energetic |\n| ELENA | Bright & cheerful |\n| ZARA | Bright & cheerful |\n| ALEX | Informative & clear |\n| JAMES | Informative & clear |\n| CLAIRE | Informative & clear |\n| DAVID | Informative & clear |\n| VICTOR | Informative & clear |\n| DIANA | Smooth & flowing |\n| GRACE | Smooth & flowing |\n| NATALIE | Breezy & natural |\n| MAYA | Breezy & natural |\n| CHLOE | Easy-going & relaxed |\n| JAMIE | Easy-going & relaxed |\n| SOPHIA | Soft & gentle |\n| LUNA | Soft & gentle |\n| RICHARD | Mature & experienced |\n| HENRY | Gravelly & mature |\n| THOMAS | Even & mature |\n| STELLA | Expressive & forward |\n| EMMA | Friendly & approachable |\n| SARAH | Warm & welcoming |\n| RUBY | Lively & animated |\n| ROSE | Gentle & kind |\n| JAKE | Casual |",
+        "operationId": "generateViaScript",
+        "parameters": [
+          {
+            "name": "draft",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateAudioViaScriptRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        },
+        "x-cost-unit-based": {
+          "unit": "1000 token",
+          "creditsPerUnit": "1"
+        }
+      }
+    },
+    "/v1/video/{videoFileId}": {
+      "get": {
+        "tags": [
+          "Video"
+        ],
+        "summary": "Get Video Info",
+        "description": "Retrieves metadata about a video file including resolution, duration, FPS, and frame count",
+        "operationId": "getVideoInfo",
+        "parameters": [
+          {
+            "name": "videoFileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/VideoInfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/job": {
+      "get": {
+        "tags": [
+          "Job"
+        ],
+        "summary": "Get Jobs",
+        "description": "Returns all jobs for the current user in a paginated way, ordered by scheduling time descending. Optionally filter by status.",
+        "operationId": "getJobs",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0,
+              "minimum": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20,
+              "maximum": 20,
+              "minimum": 1
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "DRAFT",
+                "SCHEDULED",
+                "RUNNING",
+                "DONE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedResponseJobResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/job/{jobId}": {
+      "get": {
+        "tags": [
+          "Job"
+        ],
+        "summary": "Get Job Information",
+        "description": "Returns all information related to the given job including status, result, error messages, and credit costs",
+        "operationId": "getJob",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Job"
+        ],
+        "summary": "Delete Draft Job",
+        "description": "Deletes a DRAFT job owned by the current user. Only jobs in DRAFT status can be deleted.",
+        "operationId": "deleteDraftJob",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
+    },
+    "/v1/file/{id}": {
+      "get": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Get File",
+        "description": "Downloads a file by ID.",
+        "operationId": "get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Delete File",
+        "description": "Permanently deletes a stored file",
+        "operationId": "delete_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/file/{id}/{dlToken}": {
+      "get": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Get File (via dlToken)",
+        "description": "Downloads a file by ID via dlToken",
+        "operationId": "getWithDlToken",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "dlToken",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/file/{id}/meta-data": {
+      "get": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Get File Meta Data",
+        "description": "Retrieves metadata about a stored file including filename, size, content type, and upload timestamp.",
+        "operationId": "getMetaData",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoredFileMetaDataResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/file/zip": {
+      "get": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Download Multiple Files as ZIP",
+        "description": "Downloads multiple files as a ZIP archive (STORE compression). All requested files must belong to the authenticated user.",
+        "operationId": "downloadZip",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/file/zip/{dlToken}": {
+      "get": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Download Multiple Files as ZIP (via dlToken)",
+        "description": "Downloads multiple files as a ZIP archive (STORE compression). All requested files must belong to the authenticated user.",
+        "operationId": "downloadZipWithDlToken",
+        "parameters": [
+          {
+            "name": "ids",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          },
+          {
+            "name": "dlToken",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/file/dl-token": {
+      "get": {
+        "tags": [
+          "File"
+        ],
+        "summary": "Get a file download token",
+        "description": "Get a short-lived file download token to download a file",
+        "operationId": "getDlToken",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/DlTokenResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/audio/{audioFileId}": {
+      "get": {
+        "tags": [
+          "Audio"
+        ],
+        "summary": "Get Audio Info",
+        "description": "Retrieves metadata about an audio file including duration",
+        "operationId": "getAudioInfo",
+        "parameters": [
+          {
+            "name": "audioFileId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/AudioInfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TranscodeVideoRequest": {
+        "type": "object",
+        "properties": {
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "outputWidth": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0,
+            "description": "width of the output video file, set to 0 to keep current value, set to -1 to auto-calculate based on the aspect ratio",
+            "example": 1920,
+            "maximum": 3840,
+            "minimum": -1
+          },
+          "outputHeight": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0,
+            "description": "height of the output video file, set to 0 to keep current value, set to -1 to auto-calculate based on the aspect ratio",
+            "example": 1080,
+            "maximum": 2160,
+            "minimum": -1
+          },
+          "outputFps": {
+            "type": "integer",
+            "format": "int32",
+            "default": 0,
+            "description": "frames per second (fps) of the resulting video, set to 0 to keep the fps of the source video",
+            "minimum": 0
+          },
+          "outputFormat": {
+            "type": "string",
+            "enum": [
+              "H265_LOSSLESS",
+              "H265",
+              "H265_SMALL",
+              "H265_SMALLER"
+            ]
+          }
+        },
+        "required": [
+          "outputFormat",
+          "videoFileId"
+        ]
+      },
+      "JobResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "description": "job type"
+          },
+          "status": {
+            "type": "string",
+            "description": "job status",
+            "enum": [
+              "DRAFT",
+              "SCHEDULED",
+              "RUNNING",
+              "DONE"
+            ]
+          },
+          "errorReason": {
+            "type": "string",
+            "description": "did any error occur? If so, this will be anything other than NONE",
+            "enum": [
+              "NONE",
+              "INSUFFICIENT_CREDITS",
+              "ERROR_IN_EXECUTION"
+            ]
+          },
+          "error": {
+            "type": "string",
+            "description": "in case of an error this will display the human readable error message"
+          },
+          "result": {
+            "type": "string",
+            "format": "uuid",
+            "description": "in case the job was successful, this will contain the id of the resulting file"
+          },
+          "paidCredits": {
+            "type": "integer",
+            "format": "int32",
+            "description": "the amount of credits charged for this job"
+          },
+          "estimatedCosts": {
+            "type": "integer",
+            "format": "int32",
+            "description": "the estimated cost in credits for this job (calculated at scheduling time)"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "createdAt",
+          "errorReason",
+          "id",
+          "paidCredits",
+          "status",
+          "type"
+        ]
+      },
+      "AddSubtitlesToVideoRequest": {
+        "type": "object",
+        "properties": {
+          "outputFormat": {
+            "type": "string",
+            "description": "output format for audio and video of the resulting video",
+            "enum": [
+              "H265_LOSSLESS",
+              "H265",
+              "H265_SMALL",
+              "H265_SMALLER"
+            ]
+          },
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "video id"
+          },
+          "style": {
+            "$ref": "#/components/schemas/SubtitleStyle",
+            "description": "style of the subtitle to render"
+          },
+          "script": {
+            "type": "string",
+            "description": "script (optional, used to auto-correct spelling in subtitles)"
+          }
+        },
+        "required": [
+          "outputFormat",
+          "style",
+          "videoFileId"
+        ]
+      },
+      "FontSetting": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "MONTSERRAT_SEMIBOLD",
+              "MONTSERRAT_BLACK",
+              "MONTSERRAT_BOLD",
+              "MONTSERRAT_LIGHT",
+              "MONTSERRAT_REGULAR",
+              "QUICKSAND_REGULAR",
+              "QUICKSAND_MEDIUM",
+              "QUICKSAND_BOLD",
+              "QUICKSAND_LIGHT",
+              "QUICKSAND_SEMIBOLD"
+            ]
+          },
+          "size": {
+            "type": "number",
+            "format": "float",
+            "maximum": 100,
+            "minimum": 1
+          },
+          "color": {
+            "type": "string"
+          },
+          "outlineColor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "color",
+          "name",
+          "size"
+        ]
+      },
+      "SubtitleStyle": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "SIMPLE",
+              "NO_HIGHLIGHT",
+              "SIMPLE_SINE"
+            ]
+          },
+          "font": {
+            "$ref": "#/components/schemas/FontSetting"
+          },
+          "highlightColor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "font",
+          "highlightColor",
+          "type"
+        ]
+      },
+      "ReplaceAudioRequest": {
+        "type": "object",
+        "properties": {
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "video file to replace the audio of"
+          },
+          "audioFileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "audio to use as replacement"
+          }
+        },
+        "required": [
+          "audioFileId",
+          "videoFileId"
+        ]
+      },
+      "Offset": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "y": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ]
+      },
+      "OverlayDefinition": {
+        "type": "object",
+        "properties": {
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "start": {
+            "type": "number",
+            "format": "double"
+          },
+          "stop": {
+            "type": "number",
+            "format": "double"
+          },
+          "offset": {
+            "$ref": "#/components/schemas/Offset"
+          }
+        },
+        "required": [
+          "offset",
+          "videoFileId"
+        ]
+      },
+      "OverlayVideoRequest": {
+        "type": "object",
+        "properties": {
+          "backgroundVideoFileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "video id of the background/base video"
+          },
+          "overlays": {
+            "type": "array",
+            "description": "list of overlays to put on top of the background",
+            "items": {
+              "$ref": "#/components/schemas/OverlayDefinition"
+            }
+          },
+          "outputFormat": {
+            "type": "string",
+            "description": "format of the resulting video",
+            "enum": [
+              "H265_LOSSLESS",
+              "H265",
+              "H265_SMALL",
+              "H265_SMALLER"
+            ]
+          }
+        },
+        "required": [
+          "backgroundVideoFileId",
+          "outputFormat",
+          "overlays"
+        ]
+      },
+      "MixInAudioRequest": {
+        "type": "object",
+        "properties": {
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "audioFileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "audioVolume": {
+            "type": "integer",
+            "format": "int32",
+            "description": "the volume of the audio from the audio file (between 0 and 100)",
+            "maximum": 100,
+            "minimum": 0
+          }
+        },
+        "required": [
+          "audioFileId",
+          "audioVolume",
+          "videoFileId"
+        ]
+      },
+      "GeneratePreviewRequest": {
+        "type": "object",
+        "properties": {
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "video file to create previews of"
+          },
+          "offset": {
+            "type": "number",
+            "format": "double",
+            "description": "offset (in seconds) to start taking previews from",
+            "minimum": 0
+          },
+          "offsetBetweenImages": {
+            "type": "number",
+            "format": "double",
+            "description": "offset (in seconds) between two preview images",
+            "maximum": 9999,
+            "minimum": 0.1
+          },
+          "targetWidth": {
+            "type": "integer",
+            "format": "int32",
+            "description": "width of the resulting preview images (height is calculated automatically to keep the original's video aspect ratio)",
+            "maximum": 3840,
+            "minimum": 1
+          },
+          "maxAmount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "max amount of preview images to take",
+            "maximum": 9999,
+            "minimum": 1
+          },
+          "outputType": {
+            "type": "string",
+            "description": "result type, either a stitched JPG consisting of all the preview images, or a zip file containing all the preview images",
+            "enum": [
+              "STITCHED_JPG",
+              "ZIP"
+            ]
+          }
+        },
+        "required": [
+          "maxAmount",
+          "offset",
+          "offsetBetweenImages",
+          "outputType",
+          "targetWidth",
+          "videoFileId"
+        ]
+      },
+      "ExtractAudioRequest": {
+        "type": "object",
+        "properties": {
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "audioFormat": {
+            "type": "string",
+            "enum": [
+              "FLAC",
+              "AAC_HQ",
+              "AAC",
+              "MP3"
+            ]
+          }
+        },
+        "required": [
+          "audioFormat",
+          "videoFileId"
+        ]
+      },
+      "CropOffset": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ]
+      },
+      "CutVideoRequest": {
+        "type": "object",
+        "properties": {
+          "outputSize": {
+            "$ref": "#/components/schemas/VideoSize",
+            "description": "dimensions of the resulting video"
+          },
+          "outputFps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "frames per second (fps) of the resulting video",
+            "minimum": 1
+          },
+          "outputFormat": {
+            "type": "string",
+            "description": "output format for audio and video of the resulting video",
+            "enum": [
+              "H265_LOSSLESS",
+              "H265",
+              "H265_SMALL",
+              "H265_SMALLER"
+            ]
+          },
+          "sequences": {
+            "type": "array",
+            "description": "sequences of videos to cut into the final video",
+            "items": {
+              "$ref": "#/components/schemas/VideoSequence"
+            }
+          }
+        },
+        "required": [
+          "outputFormat",
+          "outputFps",
+          "outputSize",
+          "sequences"
+        ]
+      },
+      "VideoSequence": {
+        "type": "object",
+        "properties": {
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "start": {
+            "type": "number",
+            "format": "double"
+          },
+          "end": {
+            "type": "number",
+            "format": "double"
+          },
+          "cropOffset": {
+            "$ref": "#/components/schemas/CropOffset"
+          }
+        },
+        "required": [
+          "start",
+          "videoFileId"
+        ]
+      },
+      "VideoSize": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 3840,
+            "minimum": 128
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32",
+            "maximum": 2160,
+            "minimum": 128
+          }
+        },
+        "required": [
+          "height",
+          "width"
+        ]
+      },
+      "CaptionVideoRequest": {
+        "type": "object",
+        "properties": {
+          "outputFormat": {
+            "type": "string",
+            "description": "output format for audio and video of the resulting video",
+            "enum": [
+              "H265_LOSSLESS",
+              "H265",
+              "H265_SMALL",
+              "H265_SMALLER"
+            ]
+          },
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "video id"
+          },
+          "subtitle": {
+            "type": "string",
+            "description": "subtitle text to burn into the video",
+            "maxLength": 8000,
+            "minLength": 0
+          },
+          "subtitleSpeedFactor": {
+            "type": "number",
+            "format": "double",
+            "description": "subtitle text speed factor (higher = faster, lower = slower)",
+            "maximum": 10,
+            "minimum": 0.1
+          },
+          "subtitleStyle": {
+            "$ref": "#/components/schemas/SubtitleStyle",
+            "description": "style of the subtitle to render"
+          },
+          "lengthPrecedence": {
+            "type": "string",
+            "description": "length precedence",
+            "enum": [
+              "VIDEO",
+              "SUBTITLES"
+            ]
+          }
+        },
+        "required": [
+          "lengthPrecedence",
+          "outputFormat",
+          "subtitle",
+          "subtitleSpeedFactor",
+          "subtitleStyle",
+          "videoFileId"
+        ]
+      },
+      "AiSplitVideoRequest": {
+        "type": "object",
+        "properties": {
+          "videoFileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "id of the video to extract sequences of"
+          },
+          "prompt": {
+            "type": "string",
+            "description": "extraction prompt; something like 'cut the video based on the transition points'",
+            "maxLength": 8000,
+            "minLength": 1
+          }
+        },
+        "required": [
+          "prompt",
+          "videoFileId"
+        ]
+      },
+      "AiComposeSocialMediaVideoRequest": {
+        "type": "object",
+        "properties": {
+          "outputSize": {
+            "$ref": "#/components/schemas/VideoSize",
+            "description": "dimensions of the resulting video"
+          },
+          "outputFps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "frames per second (fps) of the resulting video",
+            "maximum": 120,
+            "minimum": 1
+          },
+          "outputFormat": {
+            "type": "string",
+            "description": "output format for audio and video of the resulting video",
+            "enum": [
+              "H265_LOSSLESS",
+              "H265",
+              "H265_SMALL",
+              "H265_SMALLER"
+            ]
+          },
+          "videoFileIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "description": "video files to consider to cut sequences from into the final video"
+            },
+            "maxItems": 100,
+            "minItems": 1
+          },
+          "script": {
+            "type": "string",
+            "description": "the script for the narrated voice-over (may contain stage directions)",
+            "maxLength": 8000,
+            "minLength": 1
+          },
+          "voice": {
+            "type": "string",
+            "description": "the voice for the voice-over, or null to not have a voice over",
+            "enum": [
+              "JILLIAN",
+              "MARCUS",
+              "ETHAN",
+              "ANDREA",
+              "OLIVER",
+              "RYAN",
+              "ELENA",
+              "ZARA",
+              "ALEX",
+              "JAMES",
+              "CLAIRE",
+              "DAVID",
+              "VICTOR",
+              "DIANA",
+              "GRACE",
+              "NATALIE",
+              "MAYA",
+              "CHLOE",
+              "JAMIE",
+              "SOPHIA",
+              "LUNA",
+              "RICHARD",
+              "HENRY",
+              "THOMAS",
+              "STELLA",
+              "EMMA",
+              "SARAH",
+              "RUBY",
+              "ROSE",
+              "JAKE"
+            ]
+          },
+          "additionalPrompt": {
+            "type": "string",
+            "description": "optional additional prompt for how to cut & compose the video",
+            "maxLength": 8000,
+            "minLength": 1
+          },
+          "subtitleStyle": {
+            "$ref": "#/components/schemas/SubtitleStyle",
+            "description": "style of the subtitle to render, set to null for no subtitles"
+          },
+          "music": {
+            "type": "boolean",
+            "description": "let the AI automatically choose fitting music and mix it in?"
+          },
+          "enableSmartCrop": {
+            "type": "boolean",
+            "description": "when true, the AI will determine the optimal crop position for aspect ratio changes instead of center cropping"
+          }
+        },
+        "required": [
+          "enableSmartCrop",
+          "music",
+          "outputFormat",
+          "outputFps",
+          "outputSize",
+          "script",
+          "videoFileIds"
+        ]
+      },
+      "AiCutVideoRequest": {
+        "type": "object",
+        "properties": {
+          "outputSize": {
+            "$ref": "#/components/schemas/VideoSize",
+            "description": "dimensions of the resulting video"
+          },
+          "outputFps": {
+            "type": "integer",
+            "format": "int32",
+            "description": "frames per second (fps) of the resulting video",
+            "maximum": 120,
+            "minimum": 1
+          },
+          "outputFormat": {
+            "type": "string",
+            "description": "output format for audio and video of the resulting video",
+            "enum": [
+              "H265_LOSSLESS",
+              "H265",
+              "H265_SMALL",
+              "H265_SMALLER"
+            ]
+          },
+          "videoFileIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid",
+              "description": "video files to consider to cut sequences from into the final video"
+            },
+            "maxItems": 100,
+            "minItems": 1
+          },
+          "prompt": {
+            "type": "string",
+            "description": "prompt for the ai to know how the final video should look like",
+            "maxLength": 8000,
+            "minLength": 1
+          },
+          "enableSmartCrop": {
+            "type": "boolean",
+            "description": "when true, the AI will determine the optimal crop position for aspect ratio changes instead of center cropping"
+          }
+        },
+        "required": [
+          "enableSmartCrop",
+          "outputFormat",
+          "outputFps",
+          "outputSize",
+          "prompt",
+          "videoFileIds"
+        ]
+      },
+      "RenderSubtitleTarget": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 128
+          },
+          "fps": {
+            "type": "number",
+            "format": "double",
+            "maximum": 60,
+            "minimum": 25
+          }
+        },
+        "required": [
+          "fps",
+          "width"
+        ]
+      },
+      "SubtitleRenderRequest": {
+        "type": "object",
+        "properties": {
+          "renderTarget": {
+            "$ref": "#/components/schemas/RenderSubtitleTarget"
+          },
+          "fileId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "audio file or video file for which the subtitle should be generated for"
+          },
+          "outputType": {
+            "type": "string",
+            "enum": [
+              "WEB_M",
+              "ZIP"
+            ]
+          },
+          "style": {
+            "$ref": "#/components/schemas/SubtitleStyle"
+          }
+        },
+        "required": [
+          "fileId",
+          "outputType",
+          "renderTarget",
+          "style"
+        ]
+      },
+      "Action": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type"
+        },
+        "properties": {
+          "time": {
+            "type": "number",
+            "format": "double"
+          },
+          "interpolation": {
+            "type": "string",
+            "enum": [
+              "LINEAR",
+              "EASE_IN_QUADRATIC",
+              "EASE_IN_CUBIC",
+              "EASE_IN_QUARTIC",
+              "EASE_IN_QUINTIC",
+              "EASE_IN_SINUSODIAL",
+              "EASE_IN_EXPONENTIAL",
+              "EASE_IN_CIRCULAR",
+              "EASE_IN_BACK",
+              "EASE_OUT_QUADRATIC",
+              "EASE_OUT_CUBIC",
+              "EASE_OUT_QUARTIC",
+              "EASE_OUT_QUINTIC",
+              "EASE_OUT_SINUSODIAL",
+              "EASE_OUT_EXPONENTIAL",
+              "EASE_OUT_CIRCULAR",
+              "EASE_OUT_BACK",
+              "QUADRATIC",
+              "CUBIC",
+              "SINUSODIAL",
+              "EXPONENTIAL",
+              "CIRCULAR",
+              "BEZIER"
+            ]
+          },
+          "done": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "done",
+          "interpolation",
+          "time",
+          "type"
+        ]
+      },
+      "AlphaAction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "node": {
+                "type": "string"
+              },
+              "alpha": {
+                "type": "number",
+                "format": "float",
+                "writeOnly": true
+              }
+            }
+          }
+        ],
+        "required": [
+          "done",
+          "interpolation",
+          "node",
+          "time"
+        ]
+      },
+      "AssetNode": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Node"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "fileId": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "spriteSheet": {
+                "$ref": "#/components/schemas/Vector2i"
+              },
+              "animationFps": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "required": [
+          "alpha",
+          "animationFps",
+          "fileId",
+          "name",
+          "position",
+          "rotation",
+          "scale",
+          "size",
+          "spriteSheet",
+          "zindex"
+        ]
+      },
+      "GroupAction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          }
+        ],
+        "required": [
+          "done",
+          "interpolation",
+          "time"
+        ]
+      },
+      "GroupNode": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Node"
+          }
+        ],
+        "required": [
+          "alpha",
+          "name",
+          "position",
+          "rotation",
+          "scale",
+          "size",
+          "zindex"
+        ]
+      },
+      "LoopAction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "times": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "required": [
+          "done",
+          "interpolation",
+          "time",
+          "times"
+        ]
+      },
+      "MoveAction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "node": {
+                "type": "string"
+              },
+              "position": {
+                "$ref": "#/components/schemas/Vector2",
+                "writeOnly": true
+              }
+            }
+          }
+        ],
+        "required": [
+          "done",
+          "interpolation",
+          "node",
+          "time"
+        ]
+      },
+      "Node": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type"
+        },
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "position": {
+            "$ref": "#/components/schemas/Vector2"
+          },
+          "rotation": {
+            "type": "number",
+            "format": "double"
+          },
+          "center": {
+            "$ref": "#/components/schemas/Vector2"
+          },
+          "scale": {
+            "type": "number",
+            "format": "double"
+          },
+          "alpha": {
+            "type": "number",
+            "format": "float"
+          },
+          "zIndex": {
+            "type": "integer",
+            "format": "int32",
+            "writeOnly": true
+          },
+          "size": {
+            "$ref": "#/components/schemas/Vector2i"
+          },
+          "zindex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "alpha",
+          "name",
+          "position",
+          "rotation",
+          "scale",
+          "size",
+          "type",
+          "zindex"
+        ]
+      },
+      "OverlayRenderRequest": {
+        "type": "object",
+        "properties": {
+          "videoTarget": {
+            "$ref": "#/components/schemas/RenderVideoTarget"
+          },
+          "outputType": {
+            "type": "string",
+            "enum": [
+              "WEB_M",
+              "ZIP"
+            ]
+          },
+          "nodes": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AssetNode"
+                },
+                {
+                  "$ref": "#/components/schemas/GroupNode"
+                },
+                {
+                  "$ref": "#/components/schemas/TextNode"
+                }
+              ]
+            }
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/AlphaAction"
+                },
+                {
+                  "$ref": "#/components/schemas/GroupAction"
+                },
+                {
+                  "$ref": "#/components/schemas/LoopAction"
+                },
+                {
+                  "$ref": "#/components/schemas/MoveAction"
+                },
+                {
+                  "$ref": "#/components/schemas/RotateAction"
+                },
+                {
+                  "$ref": "#/components/schemas/ScaleAction"
+                },
+                {
+                  "$ref": "#/components/schemas/WaitAction"
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "actions",
+          "nodes",
+          "outputType",
+          "videoTarget"
+        ]
+      },
+      "RenderVideoTarget": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "duration": {
+            "type": "number",
+            "format": "double"
+          },
+          "fps": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "duration",
+          "fps",
+          "height",
+          "width"
+        ]
+      },
+      "RotateAction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "node": {
+                "type": "string"
+              },
+              "rotation": {
+                "type": "number",
+                "format": "double",
+                "writeOnly": true
+              }
+            }
+          }
+        ],
+        "required": [
+          "done",
+          "interpolation",
+          "node",
+          "time"
+        ]
+      },
+      "ScaleAction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "node": {
+                "type": "string"
+              },
+              "scale": {
+                "type": "number",
+                "format": "double",
+                "writeOnly": true
+              }
+            }
+          }
+        ],
+        "required": [
+          "done",
+          "interpolation",
+          "node",
+          "time"
+        ]
+      },
+      "TextBackgroundSetting": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "ROUNDED_BOX",
+              "ORGANIC"
+            ]
+          },
+          "color": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "color",
+          "type"
+        ]
+      },
+      "TextNode": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Node"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "font": {
+                "$ref": "#/components/schemas/FontSetting"
+              },
+              "background": {
+                "$ref": "#/components/schemas/TextBackgroundSetting"
+              },
+              "maxWidth": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "alignment": {
+                "type": "string",
+                "enum": [
+                  "LEFT",
+                  "CENTER",
+                  "RIGHT"
+                ]
+              }
+            }
+          }
+        ],
+        "required": [
+          "alignment",
+          "alpha",
+          "font",
+          "maxWidth",
+          "name",
+          "position",
+          "rotation",
+          "scale",
+          "size",
+          "text",
+          "zindex"
+        ]
+      },
+      "Vector2": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ]
+      },
+      "Vector2i": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "y": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ]
+      },
+      "WaitAction": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          }
+        ],
+        "required": [
+          "done",
+          "interpolation",
+          "time"
+        ]
+      },
+      "StoredFileMetaDataResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "uploadedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastAccessedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "contentType",
+          "fileName",
+          "hash",
+          "id",
+          "lastAccessedAt",
+          "public",
+          "size",
+          "uploadedAt"
+        ]
+      },
+      "PullFileRequest": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "url"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "TranscodeAudioRequest": {
+        "type": "object",
+        "properties": {
+          "audioFileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "outputFormat": {
+            "type": "string",
+            "enum": [
+              "FLAC",
+              "AAC_HQ",
+              "AAC",
+              "MP3"
+            ]
+          }
+        },
+        "required": [
+          "audioFileId",
+          "outputFormat"
+        ]
+      },
+      "GenerateAudioViaScriptRequest": {
+        "type": "object",
+        "properties": {
+          "script": {
+            "type": "string",
+            "minLength": 1
+          },
+          "voice": {
+            "type": "string",
+            "enum": [
+              "JILLIAN",
+              "MARCUS",
+              "ETHAN",
+              "ANDREA",
+              "OLIVER",
+              "RYAN",
+              "ELENA",
+              "ZARA",
+              "ALEX",
+              "JAMES",
+              "CLAIRE",
+              "DAVID",
+              "VICTOR",
+              "DIANA",
+              "GRACE",
+              "NATALIE",
+              "MAYA",
+              "CHLOE",
+              "JAMIE",
+              "SOPHIA",
+              "LUNA",
+              "RICHARD",
+              "HENRY",
+              "THOMAS",
+              "STELLA",
+              "EMMA",
+              "SARAH",
+              "RUBY",
+              "ROSE",
+              "JAKE"
+            ]
+          },
+          "outputFormat": {
+            "type": "string",
+            "enum": [
+              "FLAC",
+              "AAC_HQ",
+              "AAC",
+              "MP3"
+            ]
+          }
+        },
+        "required": [
+          "outputFormat",
+          "script",
+          "voice"
+        ]
+      },
+      "GetOrCreateUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "WAITING_LIST",
+              "ACTIVE",
+              "BLOCKED"
+            ]
+          }
+        },
+        "required": [
+          "email",
+          "externalId",
+          "name",
+          "state"
+        ]
+      },
+      "UserResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "externalId": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "USER",
+              "ADMIN"
+            ]
+          },
+          "subscriptionTier": {
+            "type": "string",
+            "enum": [
+              "FREE",
+              "CONTENT_CREATOR_BASIC",
+              "CONTENT_CREATOR_PRO",
+              "VIDEO_PROFESSIONAL"
+            ]
+          },
+          "tierCredits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "purchasedCredits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalCredits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "jobsRemaining": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lastMonthlyRefill": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "paymentProviderCustomerId": {
+            "type": "string"
+          },
+          "paymentSubscriptionStatus": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "ACTIVE",
+              "CANCELING",
+              "PAST_DUE",
+              "CANCELED"
+            ]
+          },
+          "paymentSubscriptionPeriodEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "freeTrialPeriodEnd": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "WAITING_LIST",
+              "ACTIVE",
+              "BLOCKED"
+            ]
+          },
+          "hasAccess": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "email",
+          "externalId",
+          "hasAccess",
+          "id",
+          "jobsRemaining",
+          "paymentSubscriptionStatus",
+          "purchasedCredits",
+          "role",
+          "state",
+          "subscriptionTier",
+          "tierCredits",
+          "totalCredits"
+        ]
+      },
+      "StartFreeTrialRequest": {
+        "type": "object",
+        "properties": {
+          "tier": {
+            "type": "string",
+            "enum": [
+              "FREE",
+              "CONTENT_CREATOR_BASIC",
+              "CONTENT_CREATOR_PRO",
+              "VIDEO_PROFESSIONAL"
+            ]
+          },
+          "trialEnd": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "tier",
+          "trialEnd"
+        ]
+      },
+      "ChangeUserSubscriptionRequest": {
+        "type": "object",
+        "properties": {
+          "newSubscriptionTier": {
+            "type": "string",
+            "enum": [
+              "FREE",
+              "CONTENT_CREATOR_BASIC",
+              "CONTENT_CREATOR_PRO",
+              "VIDEO_PROFESSIONAL"
+            ]
+          }
+        },
+        "required": [
+          "newSubscriptionTier"
+        ]
+      },
+      "TopUpCreditsRequest": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "amount"
+        ]
+      },
+      "ApiKeyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "key": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "CALL_API",
+                "EDIT_USERS",
+                "EDIT_FILES",
+                "EDIT_PUBLIC_DATA"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "deactivatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "createdAt",
+          "id",
+          "key",
+          "permissions",
+          "userId"
+        ]
+      },
+      "CreateOrUpdatePublicDataRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "MUSIC"
+            ]
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "type"
+        ]
+      },
+      "PublicDataResponse": {
+        "type": "object",
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "MUSIC"
+            ]
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "fileId",
+          "type"
+        ]
+      },
+      "UpdateUserRequest": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "WAITING_LIST",
+              "ACTIVE",
+              "BLOCKED"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "VideoInfoResponse": {
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "fps": {
+            "type": "number",
+            "format": "double"
+          },
+          "frames": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "duration": {
+            "type": "number",
+            "format": "double"
+          },
+          "timePerFrame": {
+            "type": "number",
+            "format": "double"
+          },
+          "hasAudio": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "duration",
+          "fps",
+          "frames",
+          "hasAudio",
+          "height",
+          "timePerFrame",
+          "width"
+        ]
+      },
+      "PagedResponseJobResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobResponse"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": [
+          "content",
+          "page",
+          "size",
+          "totalElements",
+          "totalPages"
+        ]
+      },
+      "DlTokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "AudioInfoResponse": {
+        "type": "object",
+        "properties": {
+          "duration": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "duration"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "ApiKey": {
+        "type": "apiKey",
+        "description": "API key for authentication.",
+        "name": "x-api-key",
+        "in": "header"
+      }
+    }
+  }
+}
