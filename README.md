@@ -195,5 +195,5 @@ Publishing is automated with [semantic-release](https://github.com/semantic-rele
 
 ## Resources
 
-- [Video API documentation](https://video-api.io)
+- [Video API documentation](https://docs.video-api.io)
 - [n8n community nodes](https://docs.n8n.io/integrations/community-nodes/)
